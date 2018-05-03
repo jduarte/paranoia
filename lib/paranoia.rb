@@ -150,13 +150,15 @@ module Paranoia
             # .paranoid? will work for both instances and classes
             next unless association_data && association_data.paranoid?
             if reflection.collection?
-              next association_data.with_deleted.each(&:really_destroy!)
+              association_data.with_deleted.each(&:really_destroy!)
+            else
+              association_data.really_destroy!
             end
-            association_data.really_destroy!
           end
         end
-        update_columns(paranoia_destroy_attributes)
-        destroy_without_paranoia
+        # update_columns(paranoia_destroy_attributes)
+        # destroy_without_paranoia
+        really_delete
       end
     end
   end
